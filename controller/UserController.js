@@ -12,7 +12,8 @@ router.post(`/`, async (req, res, next) => {
         const {
             name,
             customer_sid,
-            email
+            email,
+            props = {}
         } = req.body;
 
         const user_sid = await userService.insert({
@@ -20,6 +21,7 @@ router.post(`/`, async (req, res, next) => {
                 customer_sid,
                 name,
                 email,
+                props
             ]
         })
 
