@@ -17,7 +17,8 @@ router.post(`/`, async (req, res, next) => {
             salutation = DEFAULT_SALUTATION,
             cc = [],
             bcc = [], 
-            customer_sid
+            customer_sid,
+            name
         } = req.body;
 
         const email_template_sid = await emailTemplateService.insert({
@@ -28,7 +29,8 @@ router.post(`/`, async (req, res, next) => {
             salutation,
             cc,
             bcc, 
-            customer_sid
+            customer_sid,
+            name
         });
 
         return res.status(201).json({ message : "Email Template created", email_template_sid });

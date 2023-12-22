@@ -2,7 +2,7 @@ const db = require("../db/db");
 const CrudRepository = require("./CrudRepository");
 
 const tableName = "email_template";
-const columns = ["sid", "customer_sid", "props"];
+const columns = ["sid", "customer_sid", "props", "name"];
 const json_column_names = ["props"];
 
 class EmailTemplateRepository extends CrudRepository {

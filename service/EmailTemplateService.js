@@ -17,7 +17,8 @@ class EmailTemplateService extends CrudService {
         salutation,
         cc,
         bcc,
-        customer_sid
+        customer_sid,
+        name
     }) {
 
         const props = {
@@ -31,7 +32,7 @@ class EmailTemplateService extends CrudService {
         };
 
         const email_template_sid = await super.insert({
-            values: [customer_sid, props]
+            values: [customer_sid, props, name]
         });
         return email_template_sid;
     }

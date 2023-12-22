@@ -26,9 +26,13 @@ CREATE TABLE series (
 CREATE TABLE email_template (
     id SERIAL PRIMARY KEY,
     sid VARCHAR(20) UNIQUE,
+    name VARCHAR(100),
     customer_sid VARCHAR(20) REFERENCES customer(sid),
     props JSONB
 );
+
+
+ALTER TABLE email_template ADD COLUMN name VARCHAR(100);
 
 CREATE TABLE user_series (
     id SERIAL PRIMARY KEY,
