@@ -1,9 +1,11 @@
 const express = require("express");
 const CustomerService = require("../service/CustomerService");
+const EmailTemplateService = require("../service/EmailTemplateService");
 
 
 const router = express.Router();
 const customerService = new CustomerService();
+const emailTemplateService = new EmailTemplateService();
 
 router.post(`/`, async (req, res, next) => {
     try{

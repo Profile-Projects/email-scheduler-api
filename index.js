@@ -4,6 +4,8 @@ const cors = require('cors');
 
 const CustomerController = require("./controller/CustomerController");
 const UserController = require("./controller/UserController");
+const SeriesController = require("./controller/SeriesController");
+const EmailTemplateController = require("./controller/EmailTemplateController");
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.use(cors(corsOptions));
 
 app.use(`/${SERVICE_PATH}/${VERSION}/customer`, CustomerController);
 app.use(`/${SERVICE_PATH}/${VERSION}/user`, UserController);
+app.use(`/${SERVICE_PATH}/${VERSION}/series`, SeriesController);
+app.use(`/${SERVICE_PATH}/${VERSION}/emailTemplate`, EmailTemplateController);
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');
