@@ -12,8 +12,11 @@ CREATE TABLE users (
     sid VARCHAR(20) UNIQUE,
     customer_sid VARCHAR(20) REFERENCES customer(sid),
     name VARCHAR(255),
-    email VARCHAR(100)
+    email VARCHAR(100),
+    props JSONB
 );
+
+ALTER TABLE users ADD COLUMN props JSONB;
 
 CREATE TABLE series (
     id SERIAL PRIMARY KEY,

@@ -10,14 +10,15 @@ router.post(`/`, async (req, res, next) => {
         const {
             customer_sid,
             name,
-            config = {}
+            steps = [],
         } = req.body;
 
-        const series_sid = await seriesService.insert({ values: [customer_sid, config]});
+        const series_sid = await seriesService.insert({ values: [steps, customer_sid, name ]});
 
         return res.status(201).json({ message: "Series created", series_sid });
     } catch(err) {
-
+        console.log()
+        console.log("Error :" + err);
     }
 });
 

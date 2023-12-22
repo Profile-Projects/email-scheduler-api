@@ -3,14 +3,8 @@
 
 const EMAIL_TEMPLATE_CONFIG = {
     content: "",
-    user_placeholder_props: 
-        {
-        
-        },
-    customer_placeholder_props: 
-        {
-
-        },
+    user_placeholder_props: [],
+    customer_placeholder_props: [],
     signature: DEFAULT_SIGNATURE,
     salutation: DEFAULT_SALUTATION,
     image_props: 
