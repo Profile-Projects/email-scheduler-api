@@ -1,0 +1,47 @@
+CREATE TABLE customer (
+  id SERIAL PRIMARY KEY,
+  sid VARCHAR(20) UNIQUE,
+  organization_name VARCHAR(255),
+  phone_number VARCHAR(50),
+  email VARCHAR(100),
+  address JSONB
+);
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    sid VARCHAR(20) UNIQUE,
+    customer_sid VARCHAR(20) REFERENCES customer(sid),
+    name VARCHAR(255),
+    email VARCHAR(100)
+);
+
+CREATE TABLE series (
+    id SERIAL PRIMARY KEY,
+    sid VARCHAR(20) UNIQUE,
+    customer_sid VARCHAR(20) REFERENCES customer(sid),
+    name VARCHAR(255),
+    config JSONB
+);
+
+CREATE TABLE email_template (
+    id SERIAL PRIMARY KEY,
+    sid VARCHAR(20) UNIQUE,
+    customer_sid VARCHAR(20) REFERENCES customer(sid),
+    props JSONB
+);
+
+CREATE TABLE user_series (
+    id SERIAL PRIMARY KEY,
+    sid VARCHAR(20) UNIQUE,
+    user_sid VARCHAR(20) REFERENCES users(sid),
+    series_sid VARCHAR(20) REFERENCES series(sid),
+    state JSONB,
+    props JSONB
+);
+
+CREATE TABLE schedule (
+    id SERIAL PRIMARY KEY,
+    sid VARCHAR(20) UNIQUE,
+    user_series_sid VARCHAR(20) REFERENCES user_series(sid),
+    scheduled_at TIMESTAMP
+);
