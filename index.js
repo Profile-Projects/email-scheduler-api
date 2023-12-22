@@ -2,10 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const CustomerController = require("./controller/CustomerController");
+const UserController = require("./controller/UserController");
+
 const app = express();
 
 const VERSION = 'v1';
-const SERVICE_PATH = "email-schedule/api"
+const SERVICE_PATH = "email-scheduler/api"
 
 const corsOptions = {
   origin: '*', // This allows requests from any origin.
@@ -24,6 +27,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
+
+app.use(`/${SERVICE_PATH}/${VERSION}/customer`, CustomerController);
+app.use(`/${SERVICE_PATH}/${VERSION}/user`, UserController);
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');

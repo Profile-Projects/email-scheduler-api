@@ -1,0 +1,12 @@
+{
+    "local":{
+        "database": {
+            "name": "email_scheduler",
+            "host": "localhost",
+            "username": "santhosh",
+            "password": "Good12345",
+            "schema": "public"
+        }
+    },
+    "dev": {}
+}
