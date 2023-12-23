@@ -5,6 +5,12 @@ const USER_PROPS = {
     "gender": "GENDER",
 }
 
+const EMAIL_TRIGGER_TYPE = {
+    "IMMEDIATE": "immediate",
+    "SCHEDULE": "schedule"
+};
+
+
 const SERIES_STATE = {
     step_index: 0
 }
@@ -14,7 +20,13 @@ const SERIES_STRATEGY = {
 };
 
 const EMAIL_TEMPLATE_STEP = {
-    email_template_sid: ""
+    email_template_sid: "",
+    trigger: EMAIL_TRIGGER_TYPE.IMMEDIATE,
+    schedule: {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+    }
 };
 
 const SERIES_CONFIG = {
@@ -46,6 +58,40 @@ const getCustomerProps = ({ email_template_sids, templateMap}) => {
     return props;
 };
 
+const formatSteps = ({ steps }) => {
+    return steps.map((step) => {
+        const { trigger } = step;
+        switch(trigger) {
+            case EMAIL_TRIGGER_TYPE.IMMEDIATE:
+                return {
+                    ...EMAIL_TEMPLATE_STEP,
+                    ...step
+                };
+            case EMAIL_TRIGGER_TYPE.SCHEDULE:
+                return formatSchedule({ step });
+            default:
+                return {
+                    ...EMAIL_TEMPLATE_STEP,
+                    ...step,
+                    trigger: EMAIL_TRIGGER_TYPE.IMMEDIATE
+                }
+        }
+    });
+}
+
+const formatSchedule = ({ step }) => {
+    const { schedule, ...remainingProps } = step;
+    const { days, hours, minutes } = schedule;
+    return {
+        ...remainingProps,
+        schedule: {
+            days,
+            hours,
+            minutes
+        }
+    };
+};
+
 module.exports = {
     SERIES_CONFIG,
     SERIES_STRATEGY,
@@ -53,5 +99,6 @@ module.exports = {
     SERIES_STATE,
     getTemplateSids,
     getTemplateProps,
-    getCustomerProps
+    getCustomerProps,
+    formatSteps
 };

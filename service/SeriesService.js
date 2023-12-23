@@ -4,7 +4,7 @@ const CrudService = require("./CrudService");
 const EmailTemplateService = require("./EmailTemplateService");
 
 const {
-    SERIES_CONFIG, getTemplateSids, getTemplateProps, getCustomerProps
+    SERIES_CONFIG, getTemplateSids, getTemplateProps, getCustomerProps, formatSteps
 
 } = require("../utils/seriesConfigUtil");
 
@@ -35,9 +35,11 @@ class SeriesService extends CrudService {
             listType: "map"
         });
 
+        const formatted_steps = formatSteps({ steps });
+
         let series_config = {
             ...SERIES_CONFIG,
-            steps,
+            steps: formatted_steps,
             user_props: getTemplateProps({
                 email_template_sids,
                 prop_name: "user_placeholder_props",
