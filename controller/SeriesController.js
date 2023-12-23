@@ -22,4 +22,19 @@ router.post(`/`, async (req, res, next) => {
     }
 });
 
+router.get(`/:series_sid`, async (req, res, next) => {
+    try {
+        const {
+            series_sid
+        } = req.params;
+
+        const series = await seriesService.findById({ value: series_sid });
+
+        return res.status(200).json({ series });
+
+    } catch(err) {
+        next(err);
+    }
+})
+
 module.exports = router;

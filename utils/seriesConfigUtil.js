@@ -5,6 +5,10 @@ const USER_PROPS = {
     "gender": "GENDER",
 }
 
+const SERIES_STATE = {
+    step_index: 0
+}
+
 const SERIES_STRATEGY = {
     "Serial": "SERIAL"
 };
@@ -32,10 +36,22 @@ const getTemplateProps = ({ email_template_sids, templateMap, prop_name  = "" })
     return Array.from(props);
 };
 
+const getCustomerProps = ({ email_template_sids, templateMap}) => {
+    let props = {};
+    email_template_sids.forEach(email_template_sid => {
+        const { props: template_props } = templateMap.get(email_template_sid);
+        const { customer_placeholder_props } = template_props;
+        props = { ...props, ...customer_placeholder_props };
+    })
+    return props;
+};
+
 module.exports = {
     SERIES_CONFIG,
     SERIES_STRATEGY,
     SERIES_CONFIG,
+    SERIES_STATE,
     getTemplateSids,
-    getTemplateProps
+    getTemplateProps,
+    getCustomerProps
 };

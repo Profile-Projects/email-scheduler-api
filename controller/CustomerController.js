@@ -14,7 +14,8 @@ router.post(`/`, async (req, res, next) => {
             organization_name,
             phone_number="",
             email, 
-            address = {}
+            address = {},
+            props = {}
         } = req.body;
 
         const customer_sid = await customerService.insert({
@@ -22,7 +23,8 @@ router.post(`/`, async (req, res, next) => {
                 organization_name,
                 phone_number,
                 email,
-                address
+                address,
+                props
             ]
         })
 

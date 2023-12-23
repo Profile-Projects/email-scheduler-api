@@ -4,7 +4,7 @@ const CrudService = require("./CrudService");
 const EmailTemplateService = require("./EmailTemplateService");
 
 const {
-    SERIES_CONFIG, getTemplateSids, getTemplateProps
+    SERIES_CONFIG, getTemplateSids, getTemplateProps, getCustomerProps
 
 } = require("../utils/seriesConfigUtil");
 
@@ -43,9 +43,8 @@ class SeriesService extends CrudService {
                 prop_name: "user_placeholder_props",
                 templateMap
             }),
-            customer_props: getTemplateProps({
+            customer_props: getCustomerProps({
                 email_template_sids,
-                prop_name: "customer_placeholder_props",
                 templateMap
             })
         };

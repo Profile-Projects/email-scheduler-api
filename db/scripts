@@ -4,8 +4,10 @@ CREATE TABLE customer (
   organization_name VARCHAR(255),
   phone_number VARCHAR(50),
   email VARCHAR(100),
-  address JSONB
+  address JSONB,
+  props JSONB
 );
+ALTER TABLE customer ADD COLUMN props JSONB;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
