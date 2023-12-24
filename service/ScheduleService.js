@@ -10,6 +10,7 @@ const UserService = require("./UserService");
 const SeriesService = require("./SeriesService");
 const UserSeriesRepository = require("../repository/UserSeriesRepository");
 const EmailTemplateService = require("./EmailTemplateService");
+const EmailService = require("./EmailService");
 
 const scheduleRepository = new ScheduleRepository();
 
@@ -17,6 +18,8 @@ const userService = new UserService();
 const userSeriesRepository = new UserSeriesRepository();
 const seriesService = new SeriesService();
 const emailTemplateService = new EmailTemplateService();
+
+const emailService = new EmailService();
 
 class ScheduleService extends CrudService {
     
@@ -48,8 +51,11 @@ class ScheduleService extends CrudService {
 
     }
 
-    async triggerEmail({ content, user_props, customer_props, email_template, cc, bcc, user }) {
+    async triggerEmail({ content, user_props, customer_props, email_template, cc, bcc, user, to }) {
         console.log(`Sending email : ${content}`);
+        
+        const html_body = `<html><body>${content}</body></html>`
+        await emailService.send({ to, html_body, subject_text: "Text Email" })
     }
 
     async scheduleImmediately({
@@ -100,7 +106,8 @@ class ScheduleService extends CrudService {
                 user,
                 user_props,
                 customer_props,
-                email_template
+                email_template,
+                to: email
             });
 
             await super.update({
