@@ -52,5 +52,10 @@ CREATE TABLE schedule (
     id SERIAL PRIMARY KEY,
     sid VARCHAR(20) UNIQUE,
     user_series_sid VARCHAR(20) REFERENCES user_series(sid),
-    scheduled_at TIMESTAMP
+    scheduled_at TIMESTAMP WITH TIME ZONE,
+    mark_complete BOOLEAN DEFAULT false,
 );
+
+ALTER TABLE schedule ADD COLUMN mark_complete BOOLEAN;
+ALTER TABLE schedule ALTER COLUMN scheduled_at TYPE TIMESTAMP WITH TIME ZONE;
+ALTER TABLE schedule ALTER COLUMN mark_complete SET DEFAULT false;

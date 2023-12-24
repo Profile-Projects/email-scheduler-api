@@ -1,5 +1,5 @@
 const db = require("../db/db");
-const { insertQuery, findAllByColumnIdsQuery, fetchByColumnsQuery, findMaxSidQuery, findByIdQuery, findByIdsQuery } = require("../queries/GenericQueries");
+const { insertQuery, findAllByColumnIdsQuery, fetchByColumnsQuery, findMaxSidQuery, findByIdQuery, findByIdsQuery, updateQuery } = require("../queries/GenericQueries");
 
 
 class CrudRepository {

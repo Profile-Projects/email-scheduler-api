@@ -92,13 +92,22 @@ const formatSchedule = ({ step }) => {
     };
 };
 
+const getSeriesStep = ({ steps, step_index}) => {
+    if (steps[step_index]) {
+        return steps[step_index];
+    }
+    return {};
+}
+
 module.exports = {
     SERIES_CONFIG,
     SERIES_STRATEGY,
     SERIES_CONFIG,
     SERIES_STATE,
+    EMAIL_TRIGGER_TYPE,
     getTemplateSids,
     getTemplateProps,
     getCustomerProps,
-    formatSteps
+    formatSteps,
+    getSeriesStep
 };
