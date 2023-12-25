@@ -24,7 +24,7 @@ const emailService = new EmailService();
 class ScheduleService extends CrudService {
     
     constructor() {
-        super(scheduleRepository, "SC");
+        super(scheduleRepository, "SC", "Schedule");
         this.initSchedule();
     }
 

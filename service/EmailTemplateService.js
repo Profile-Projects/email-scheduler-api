@@ -6,7 +6,7 @@ const emailTemplateRepository = new EmailTemplateRepository();
 class EmailTemplateService extends CrudService {
     
     constructor() {
-        super(emailTemplateRepository, "ET")
+        super(emailTemplateRepository, "ET", "EmailTemplate")
     };
 
     async insert({

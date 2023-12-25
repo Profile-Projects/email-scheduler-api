@@ -1,4 +1,5 @@
 const db = require("../db/db");
+const DatabaseException = require("../exceptions/DatabaseException");
 const { insertQuery, findAllByColumnIdsQuery, fetchByColumnsQuery, findMaxSidQuery, findByIdQuery, findByIdsQuery, updateQuery } = require("../queries/GenericQueries");
 
 
@@ -12,56 +13,119 @@ class CrudRepository {
         this.format_indices = this.getFormatIndices();
     }
 
-    async insert({ values }) { 
-        const query = insertQuery(this.tableName, this.columns, this.format({values}));
-        const result = await db.query(query, [...values]);
-        return this.getRow(result);
+    async insert({ values }) {
+        try {
+            const query = insertQuery(this.tableName, this.columns, this.format({values}));
+            const result = await db.query(query, [...values]);
+            return this.getRow(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "insert",
+                err
+            })
+        }
     }
 
     async findMaxSid() {
-        const query = findMaxSidQuery({ tableName: this.tableName, sid: this.sid });
-        const result = await db.query(query);
-        return this.getRow(result);
+        try { 
+            const query = findMaxSidQuery({ tableName: this.tableName, sid: this.sid });
+            const result = await db.query(query);
+            return this.getRow(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     }
 
     async findByIds({ values}) {
-        const query = findByIdsQuery({
-            tableName: this.tableName,
-            values
-        });
-        const result = await db.query(query);
-        return this.getRows(result);
+        try { 
+            const query = findByIdsQuery({
+                tableName: this.tableName,
+                values
+            });
+            const result = await db.query(query);
+            return this.getRows(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     }
 
     async findById({ sid = "sid", value}) {
-        const query = findByIdQuery({ tableName: this.tableName, sid });
-        const result = await db.query(query, [value]);
-        return this.getRow(result);
+        try { 
+            const query = findByIdQuery({ tableName: this.tableName, sid });
+            const result = await db.query(query, [value]);
+            return this.getRow(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     };
 
     async findAll() {
-        const query = findAllQuery(this.tableName);
-        const result = await db.query(query);
-
-        return this.getRows(result);
+        try { 
+            const query = findAllQuery(this.tableName);
+            const result = await db.query(query);
+            return this.getRows(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     }
 
     async findAllByColumn({colName, colVal}) {
-        const query = findAllByColumnQuery({ tableName: this.tableName, colName });
-        const result = await db.query(query, [colVal]);
-        return this.getRows(result);
+        try { 
+            const query = findAllByColumnQuery({ tableName: this.tableName, colName });
+            const result = await db.query(query, [colVal]);
+            return this.getRows(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     };
 
     async findAllByColumnIds({ colName, values }) {
-        const query = findAllByColumnIdsQuery({ tableName: this.tableName, colName, values });
-        const result = await db.query(query);
-        return this.getRows(result);
+        try { 
+            const query = findAllByColumnIdsQuery({ tableName: this.tableName, colName, values });
+            const result = await db.query(query);
+            return this.getRows(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     };
 
     async findAllByColumns({ columnObjList }) {
-        const query = fetchByColumnsQuery({ tableName: this.tableName, columnObjList });
-        const result = await db.query(query);
-        return this.getRows(result);
+        try { 
+            const query = fetchByColumnsQuery({ tableName: this.tableName, columnObjList });
+            const result = await db.query(query);
+            return this.getRows(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     };
     
     async update({
@@ -69,21 +133,37 @@ class CrudRepository {
         columnsToUpdate,
         values
     }) {
-        const query = updateQuery({ 
-            tableName: this.tableName, 
-            sid: this.sid,
-            sidValue, 
-            columnsToUpdate
-        });
+        try { 
+            const query = updateQuery({ 
+                tableName: this.tableName, 
+                sid: this.sid,
+                sidValue, 
+                columnsToUpdate
+            });
 
-        const { rowCount = 0} = await db.query(query, [sidValue, ...this.format({values})]);
-        return rowCount;
+            const { rowCount = 0} = await db.query(query, [sidValue, ...this.format({values})]);
+            return rowCount;
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     }
 
     async delete({ value, sid = "sid" }) {
-        const query = deleteQuery({ tableName: this.tableName, sid, value});
-        const result = await db.query(query, [value]);
-        return this.getRow(result);
+        try { 
+            const query = deleteQuery({ tableName: this.tableName, sid, value});
+            const result = await db.query(query, [value]);
+            return this.getRow(result);
+        } catch(err) {
+            throw new DatabaseException({
+                tableName: this.tableName,
+                action: "fetch",
+                err
+            })
+        }
     }
 
     getRow(result) {

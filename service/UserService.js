@@ -6,7 +6,7 @@ const userRepository = new UserRepository();
 class UserService extends CrudService {
     
     constructor() {
-        super(userRepository, "US")
+        super(userRepository, "US", "User")
     }
 };
 

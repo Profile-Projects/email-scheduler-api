@@ -6,6 +6,7 @@ const CustomerController = require("./controller/CustomerController");
 const UserController = require("./controller/UserController");
 const SeriesController = require("./controller/SeriesController");
 const EmailTemplateController = require("./controller/EmailTemplateController");
+const BaseController = require('./controller/BaseController');
 
 const app = express();
 
@@ -24,22 +25,25 @@ const errorHandler = (err, req, res, next) => {
   res.status(500).json({message: 'Internal Server Error', error: err?.message || ""});
 }
 
+const baseController = new BaseController(app);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
 
-app.use(`/${SERVICE_PATH}/${VERSION}/customer`, CustomerController);
-app.use(`/${SERVICE_PATH}/${VERSION}/user`, UserController);
-app.use(`/${SERVICE_PATH}/${VERSION}/series`, SeriesController);
-app.use(`/${SERVICE_PATH}/${VERSION}/emailTemplate`, EmailTemplateController);
+app.use(`/${SERVICE_PATH}/${VERSION}/customer`, CustomerController(app));
+app.use(`/${SERVICE_PATH}/${VERSION}/user`, UserController(app));
+app.use(`/${SERVICE_PATH}/${VERSION}/series`, SeriesController(app));
+app.use(`/${SERVICE_PATH}/${VERSION}/emailTemplate`, EmailTemplateController(app));
 
 app.get('/', (req, res) => {
   res.send('Hello from Express!');
 });
 
-app.use(errorHandler);
+// app.use(errorHandler);
+baseController.initAppHandlers();
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');

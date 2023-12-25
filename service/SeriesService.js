@@ -16,7 +16,7 @@ const seriesRepository = new SeriesRepository();
 class SeriesService extends CrudService {
     
     constructor() {
-        super(seriesRepository, "SS");
+        super(seriesRepository, "SS", "Series");
     }
 
     async insert({

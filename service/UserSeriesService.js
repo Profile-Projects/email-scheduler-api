@@ -15,7 +15,7 @@ const emailTemplateService = new EmailTemplateService();
 class UserSeriesService extends CrudService {
     
     constructor() {
-        super(userSeriesRepository, "UE")
+        super(userSeriesRepository, "UE", "userSeries")
     }
 
     async insert({ values }) {
