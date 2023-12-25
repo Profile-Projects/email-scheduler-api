@@ -4,6 +4,7 @@ const UserService = require("../service/UserService");
 const UserSeriesService = require("../service/UserSeriesService");
 const ScheduleService = require("../service/ScheduleService");
 const EmailTemplateService = require("../service/EmailTemplateService");
+const { copyOnlyNonEmptyObj } = require("../utils/jsonUtils");
 
 
 const router = express.Router();
@@ -63,6 +64,51 @@ router.post(`/addtoseries`, async (req, res, next) => {
         });
 
         return res.status(201).json({ message: "User added to series", user_series_sid });
+    } catch(err) {
+        next(err);
+    }
+});
+
+
+router.get(`/:user_sid`, async (req, res, next) => {
+    try {
+        const {
+            user_sid
+        } = req.params;
+
+        const user = await userService.findById({
+            value: user_sid 
+        });
+        
+        return res.status(200).json({ user });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put(`/:user_sid`, async (req, res, next) => {
+    try {
+        const {
+            user_sid
+        } = req.params;
+
+        // customer_sid mapping cannot be updated
+        const {
+            name,
+            email,
+            props
+        } = req.body;
+
+        await userService.update({
+            sidValue: user_sid,
+            obj: copyOnlyNonEmptyObj({
+                name,
+                email,
+                props
+            })
+        })
+        const user = await userService.findById({ value: user_sid });
+        return res.status(200).json({ user });
     } catch(err) {
         next(err);
     }

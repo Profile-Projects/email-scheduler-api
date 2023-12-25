@@ -1,5 +1,6 @@
 const express = require("express");
 const SeriesService = require("../service/SeriesService");
+const { copyOnlyNonEmptyObj } = require("../utils/jsonUtils");
 
 const router = express.Router();
 
@@ -32,6 +33,33 @@ router.get(`/:series_sid`, async (req, res, next) => {
 
         return res.status(200).json({ series });
 
+    } catch(err) {
+        next(err);
+    }
+});
+
+
+router.put(`/:series_sid`, async (req, res, next) => {
+    try {
+        const {
+            series_sid
+        } = req.params;
+
+        // customer_sid mapping cannot be updated
+        const {
+            name,
+            config
+        } = req.body;
+
+        await seriesService.update({
+            sidValue: series_sid,
+            obj: copyOnlyNonEmptyObj({
+                name,
+                config
+            })
+        })
+        const series = await seriesService.findById({ value: series_sid });
+        return res.status(200).json({ series });
     } catch(err) {
         next(err);
     }
