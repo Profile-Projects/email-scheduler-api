@@ -56,10 +56,21 @@ const formatJson = (jsonStr) => {
     }
 }
 
+const copyOnlyNonEmptyObj = (obj) => {
+    const formatted_obj = {};
+    for(const [key, val] of Object.entries(obj)) {
+        if (val) {
+            formatted_obj[key] = val;
+        }
+    }
+    return formatted_obj;
+}
+
 module.exports = {
     parseJsonProps,
     formatItemsByType,
     removeDuplicates,
     getPropMapFromList,
-    formatJson
+    formatJson,
+    copyOnlyNonEmptyObj
 }

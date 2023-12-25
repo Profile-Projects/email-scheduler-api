@@ -76,7 +76,7 @@ class CrudRepository {
             columnsToUpdate
         });
 
-        const { rowCount = 0} = await db.query(query, [sidValue, ...values]);
+        const { rowCount = 0} = await db.query(query, [sidValue, ...this.format({values})]);
         return rowCount;
     }
 

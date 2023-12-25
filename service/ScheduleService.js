@@ -15,9 +15,9 @@ const EmailService = require("./EmailService");
 const scheduleRepository = new ScheduleRepository();
 
 const userService = new UserService();
-const userSeriesRepository = new UserSeriesRepository();
 const seriesService = new SeriesService();
 const emailTemplateService = new EmailTemplateService();
+const userSeriesService = new UserSeriesService();
 
 const emailService = new EmailService();
 
@@ -140,6 +140,8 @@ class ScheduleService extends CrudService {
                 }
             })
 
+            await userSeriesService.updateStepIndex({ step_index: step_index + 1, user_series_sid })
+
             this.scheduleNextStep({
                 step_index: step_index + 1,
                 series,
@@ -159,7 +161,7 @@ class ScheduleService extends CrudService {
 
 
 
-    async fetchUserSeries({ user_series_sid}) {return await userSeriesRepository.findById({ value: user_series_sid })};
+    async fetchUserSeries({ user_series_sid}) {return await userSeriesService.findById({ value: user_series_sid })};
 
     async fetchUser({ user_sid }) { return await userService.findById({ value: user_sid })};
 

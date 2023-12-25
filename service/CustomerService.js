@@ -8,6 +8,7 @@ class CustomerService extends CrudService {
     constructor() {
         super(customerRepository, "CS")
     }
+
 };
 
 module.exports = CustomerService;
