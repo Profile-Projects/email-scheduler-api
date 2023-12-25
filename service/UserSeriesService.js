@@ -49,6 +49,7 @@ class UserSeriesService extends CrudService {
             const email_template = await emailTemplateService.findById({ value: email_template_sid });
             await scheduleService.executeStep({
                 step: first_step,
+                step_index: 0,
                 series,
                 user,
                 email_template,

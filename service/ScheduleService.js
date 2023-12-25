@@ -33,7 +33,7 @@ class ScheduleService extends CrudService {
         return trigger == EMAIL_TRIGGER_TYPE.IMMEDIATE;
     }
 
-    async executeStep({ step, series, user, email_template, user_series_sid }) {
+    async executeStep({ step, series, user, email_template, user_series_sid, step_index, trigger_next = true }) {
         // if (!this.checkStepForTrigger({ step})) return;
         const { user_props, customer_props } = series;
 
@@ -48,7 +48,30 @@ class ScheduleService extends CrudService {
                 user_series_sid
             });
         }
+        if (trigger_next) {
+            this.scheduleNextStep({ 
+                step_index: step_index + 1,
+                user_series_sid,
+                series
+            });
+        }
+    }
 
+    async scheduleNextStep({step_index, series, user_series_sid}) {
+        if (series.length <= step_index) return;
+        const {steps} = series?.config;
+        const step = steps[step_index];
+        const { trigger, schedule } = step;
+        if (trigger == EMAIL_TRIGGER_TYPE.IMMEDIATE) {
+            await this.scheduleImmediately({
+                user_series_sid
+            });
+        } else {
+            await this.scheduleAt({
+                schedule,
+                user_series_sid
+            });
+        }
     }
 
     async triggerEmail({ content, user_props, customer_props, email_template, cc, bcc, user, to }) {

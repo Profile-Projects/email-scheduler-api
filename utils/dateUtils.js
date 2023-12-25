@@ -17,9 +17,9 @@ const getImmediateDate = () => {
 
 const getScheduledAt = ({ days = 0, hours = 0, minutes = 0 }) => {
     const now = new Date();
-    now.setDate( now.getDate + days);
-    now.setHours(now.getHours + hours);
-    now.getMinutes(now.getMinutes + minutes);
+    now.setDate( now.getDate() + days);
+    now.setHours(now.getHours() + hours);
+    now.getMinutes(now.getMinutes() + minutes);
     return postGresTimestamp(now);
 };
 
