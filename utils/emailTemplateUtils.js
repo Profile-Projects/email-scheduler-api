@@ -13,7 +13,8 @@ const EMAIL_TEMPLATE_CONFIG = {
 
         },
     cc:[],
-    bcc: []
+    bcc: [],
+    subject: ""
 };
 
 

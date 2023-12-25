@@ -10,7 +10,7 @@ const postGresTimestamp = (date) => {
 
 const getImmediateDate = () => {
     const now = new Date();
-    const minutesToAdd = 5;
+    const minutesToAdd = 1;
     now.setMinutes(now.getMinutes() + minutesToAdd);
     return postGresTimestamp(now);
 }
