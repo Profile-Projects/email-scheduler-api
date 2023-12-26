@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const { COMPANY_EMAIL } = require("../utils/emailTemplateUtils");
 AWS.config.update({ region: "ap-south-1"});
 
 class EmailService {
@@ -7,12 +8,12 @@ class EmailService {
 
     }
 
-    async send({to = null, html_body = "", subject_text}) {
+    async send({to = null, html_body = "", subject_text, cc = []}) {
         if (!to) return;
         var params = {
             Destination: { /* required */
-                CcAddresses: [],
-                ToAddresses: [to]
+                CcAddresses: [...cc],
+                ToAddresses: [to],
             },
             Message: { /* required */
                 Body: { /* required */
@@ -30,8 +31,8 @@ class EmailService {
                     Data: subject_text
                 }
             },
-            Source: 'aemailscheduler@gmail.com', /* required */
-            ReplyToAddresses: ['aemailscheduler@gmail.com'],
+            Source: COMPANY_EMAIL, /* required */
+            ReplyToAddresses: [COMPANY_EMAIL],
         };
         try {
             const result = await new AWS.SES({

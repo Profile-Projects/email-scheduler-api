@@ -28,8 +28,7 @@ class SeriesController extends BaseController {
         
                 return res.status(201).json({ message: "Series created", series_sid });
             } catch(err) {
-                console.log()
-                console.log("Error :" + err);
+                next(err);
             }
         });
         

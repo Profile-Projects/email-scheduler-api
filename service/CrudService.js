@@ -45,15 +45,15 @@ class CrudService {
     }
 
     async findById({sid = "sid", value }) {
-        try {  
+        // try {  
             const entity = await this.repository.findById({ sid, value });
             if (!entity) {
                 throw new NotFoundException({ sid: this.entity_name, val: value })
             }
             return entity;
-        } catch(err) {
-            this.errorHandler({ action: "fetch", message: `Error while fetching ${err?.message}` });
-        }
+        // } catch(err) {
+        //     this.errorHandler({ action: "fetch", message: `Error while fetching ${err?.message}` });
+        // }
     }
 
     async findByIds({ sid = "sid", values, listType = "array" }) {

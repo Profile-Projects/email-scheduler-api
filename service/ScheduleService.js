@@ -11,6 +11,7 @@ const SeriesService = require("./SeriesService");
 const UserSeriesRepository = require("../repository/UserSeriesRepository");
 const EmailTemplateService = require("./EmailTemplateService");
 const EmailService = require("./EmailService");
+const { replacePlaceholders } = require("../utils/emailTemplateUtils");
 
 const scheduleRepository = new ScheduleRepository();
 
@@ -122,8 +123,13 @@ class ScheduleService extends CrudService {
             const { email_template_sid } = step;
             const email_template = await this.fetchEmailTemplate({ email_template_sid });
             const { content, cc, bcc } = email_template?.props;
-            await this.triggerEmail({
+            const placeholder_replaced_content = replacePlaceholders({
                 content,
+                user_props,
+                customer_props
+            })
+            await this.triggerEmail({
+                content: placeholder_replaced_content,
                 cc,
                 bcc,
                 user,
