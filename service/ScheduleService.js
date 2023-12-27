@@ -3,7 +3,7 @@ const cron = require("node-cron");
 const ScheduleRepository = require("../repository/ScheduleRepository");
 const UserRepository = require("../repository/UserRepository");
 const { postGresTimestamp, getImmediateDate, getScheduledAt } = require("../utils/dateUtils");
-const { EMAIL_TRIGGER_TYPE, getSeriesStep } = require("../utils/seriesConfigUtil");
+const { EMAIL_TRIGGER_TYPE, getSeriesStep, getTemplateProps } = require("../utils/seriesConfigUtil");
 const CrudService = require("./CrudService");
 const UserSeriesService = require("./UserSeriesService");
 const UserService = require("./UserService");
@@ -12,6 +12,8 @@ const UserSeriesRepository = require("../repository/UserSeriesRepository");
 const EmailTemplateService = require("./EmailTemplateService");
 const EmailService = require("./EmailService");
 const { replacePlaceholders } = require("../utils/emailTemplateUtils");
+const CustomerService = require("./CustomerService");
+const { getObjFromProps } = require("../utils/jsonUtils");
 
 const scheduleRepository = new ScheduleRepository();
 
@@ -19,6 +21,7 @@ const userService = new UserService();
 const seriesService = new SeriesService();
 const emailTemplateService = new EmailTemplateService();
 const userSeriesService = new UserSeriesService();
+const customerService = new CustomerService();
 
 const emailService = new EmailService();
 
@@ -36,7 +39,7 @@ class ScheduleService extends CrudService {
 
     async executeStep({ step, series, user, email_template, user_series_sid, step_index, trigger_next = false }) {
         // if (!this.checkStepForTrigger({ step})) return;
-        const { user_props, customer_props } = series;
+        // const { user_props, customer_props } = series;
 
         const { trigger } = step;
         if (trigger == EMAIL_TRIGGER_TYPE.IMMEDIATE) {
@@ -110,23 +113,52 @@ class ScheduleService extends CrudService {
     async pickSchedules() {
         const schedules = await scheduleRepository.fetchLast10MinutesSchedules();
         for(const schedule of schedules) {
+
             const { sid, user_series_sid } = schedule;
+
             const user_series = await this.fetchUserSeries({ user_series_sid });
             const { user_sid, series_sid, state, props } = user_series;
+
             const { step_index } = state;
-            const { user_props, customer_props } = props;
+
+            // const { user_props, customer_props } = props;
+            
             const user = await this.fetchUser({ user_sid });
-            const { email } = user;
+            const { email, props: user_props, customer_sid } = user;
+
+            const customer = await customerService.findById({ value: customer_sid });
+
+            const { props: customer_props } = customer;
             const series = await this.fetchSeries({ series_sid });
             const { config: { steps } = []} = series;
             const step = getSeriesStep({ steps, step_index });
+
             const { email_template_sid } = step;
+
             const email_template = await this.fetchEmailTemplate({ email_template_sid });
-            const { content, cc, bcc } = email_template?.props;
+            const { content, cc, bcc, user_placeholder_props, customer_placeholder_props } = email_template?.props;
+
+            const templateMap = await emailTemplateService.findByIds({values: [email_template_sid], listType:"map"});
+            const template_user_props_key = getTemplateProps({
+                email_template_sids: [email_template_sid],
+                templateMap,
+                prop_name: "user_placeholder_props"
+            });
+
+
+            const template_customer_props_key = getTemplateProps({
+                email_template_sids: [email_template_sid],
+                templateMap,
+                prop_name: "customer_placeholder_props"
+            });
+
+            const template_user_props = getObjFromProps({ props: template_user_props_key, obj: user_props});
+            const template_customer_props = getObjFromProps({ props: template_customer_props_key, obj: customer_props});
+
             const placeholder_replaced_content = replacePlaceholders({
                 content,
-                user_props,
-                customer_props
+                user_props: template_user_props,
+                customer_props: template_customer_props
             })
             await this.triggerEmail({
                 content: placeholder_replaced_content,

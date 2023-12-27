@@ -1,6 +1,6 @@
 
-const getUserPropsForSeries = ({ user, series }) => {
-    const { user_props = [], customer_props = {} } = series?.config || {};
+const getUserPropsForSeries = ({ user, series, customer }) => {
+    const { user_props = [], customer_props = [] } = series?.config || {};
     const { props: available_user_props } = user;
     const user_series_props = {};
     for(const key of user_props) {
@@ -9,8 +9,8 @@ const getUserPropsForSeries = ({ user, series }) => {
         }
     } 
     return {
-        user_props: user_series_props,
-        customer_props
+        // user_props: user_series_props,
+        // customer_props
     }
 };
 

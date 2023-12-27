@@ -35,11 +35,39 @@ const replacePlaceholders = ({ user_props, customer_props, content}) => {
     return replaced_content;
 }
 
+const getTemplatePlaceholdersFromContent = ({ content }) => {
+    const customer_props = new Set();
+    const user_props = new Set();
+    const WRAPPER_REGEX = /\$\{([^}]*)\}/g;
+    const USER_PROPS_REGEX = /^user\./;
+    const place_holders = content.match(WRAPPER_REGEX).map(str => str.slice(2, -1));
+    for(const place_holder of place_holders) {
+        if (place_holder.match(USER_PROPS_REGEX)) {
+            user_props.add(place_holder.slice(5));
+        } else {
+            customer_props.add(place_holder);
+        }
+    }
+    return {
+        customer_props: Array.from(customer_props),
+        user_props: Array.from(user_props)
+    };
+}
+
+const verifyPlaceholderProps = ({ provided_props = [], found_props = []}) => {
+    if (provided_props.length < found_props.length) return false;
+    for(const found_prop of found_props) {
+        if (provided_props.indexOf(found_prop) == -1) return false;
+    }
+    return true;
+};
 
 module.exports = {
     EMAIL_TEMPLATE_CONFIG,
     DEFAULT_SIGNATURE,
     DEFAULT_SALUTATION,
     COMPANY_EMAIL,
-    replacePlaceholders
+    replacePlaceholders,
+    getTemplatePlaceholdersFromContent,
+    verifyPlaceholderProps
 };

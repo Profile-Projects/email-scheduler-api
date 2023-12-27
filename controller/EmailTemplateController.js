@@ -24,8 +24,8 @@ class EmailTemplateController extends BaseController {
             try {
                 const {
                     content,
-                    user_placeholder_props,
-                    customer_placeholder_props,
+                    user_placeholder_props = [],
+                    customer_placeholder_props = [],
                     signature = DEFAULT_SIGNATURE,
                     salutation = DEFAULT_SALUTATION,
                     cc = [],
@@ -33,8 +33,6 @@ class EmailTemplateController extends BaseController {
                     customer_sid,
                     name
                 } = req.body;
-
-                await customerService.findById({ value: customer_sid})
 
                 const email_template_sid = await emailTemplateService.insert({
                     content,

@@ -64,6 +64,24 @@ const copyOnlyNonEmptyObj = (obj) => {
         }
     }
     return formatted_obj;
+};
+
+const getObjFromProps = ({ props = [], obj}) => {
+    const prop_obj = {};
+    for(const prop of props) {
+        if (obj[prop]) {
+            prop_obj[prop] = obj[prop];
+        }
+    }
+    return prop_obj;
+};
+
+const checkObjHasAnyProps = ({ props = [], obj}) => {
+    const keys = Object.keys(obj);
+    for(const prop of props) {
+        if (keys.includes(prop)) return true;
+    }
+    return false;
 }
 
 module.exports = {
@@ -72,5 +90,7 @@ module.exports = {
     removeDuplicates,
     getPropMapFromList,
     formatJson,
-    copyOnlyNonEmptyObj
+    copyOnlyNonEmptyObj,
+    getObjFromProps,
+    checkObjHasAnyProps
 }

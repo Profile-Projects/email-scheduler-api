@@ -1,3 +1,4 @@
+const BadRequestException = require("../exceptions/BadRequestException");
 const DatabaseException = require("../exceptions/DatabaseException");
 const InternalServerErrorException = require("../exceptions/InternalServerErrorException");
 const NotFoundException = require("../exceptions/NotFoundException");
@@ -19,6 +20,8 @@ class BaseController {
                     return this.handleInternalServerErrorException({ err, res });
                 case err instanceof DatabaseException:
                     return this.handleDatabaseException({ err, res });
+                case err instanceof BadRequestException:
+                    return this.handleBadRequestException({ err, res});
                 default:
                     return this.handleDatabaseException({ res, err })
             }
@@ -47,6 +50,11 @@ class BaseController {
     }) {
         const { message = "Database exception" } = err || {};
         return res.status(500).json({ message });
+    }
+
+    handleBadRequestException({ err, res}) {
+        const { message = "Bad request" } = err || {};
+        return res.status(400).json({ message });
     }
 }
 

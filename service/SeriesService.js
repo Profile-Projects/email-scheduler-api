@@ -46,15 +46,16 @@ class SeriesService extends CrudService {
             let series_config = {
                 ...SERIES_CONFIG,
                 steps: formatted_steps,
-                user_props: getTemplateProps({
-                    email_template_sids,
-                    prop_name: "user_placeholder_props",
-                    templateMap
-                }),
-                customer_props: getCustomerProps({
-                    email_template_sids,
-                    templateMap
-                })
+                // user_props: getTemplateProps({
+                //     email_template_sids,
+                //     prop_name: "user_placeholder_props",
+                //     templateMap
+                // }),
+                // customer_props: getTemplateProps({
+                //     email_template_sids,
+                //     templateMap,
+                //     prop_name: "customer_placeholder_props",
+                // })
             };
             const series_sid = await super.insert({
                 values: [customer_sid, name, series_config]

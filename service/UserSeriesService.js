@@ -26,17 +26,14 @@ class UserSeriesService extends CrudService {
 
         const user = await userService.findById({ value: user_sid });
 
+        const { customer_sid } = user;
+
         const series = await seriesService.findById({ value: series_sid });
 
         const props = getUserPropsForSeries({
             user,
             series
         });
-
-        // initiate first step if trigger type is immediate
-
-        const { steps } = series?.config;
-        const [ first_step ] = steps;
         
         const user_series_sid = await super.insert({ 
             values: [user_sid, series_sid, SERIES_STATE, props]
