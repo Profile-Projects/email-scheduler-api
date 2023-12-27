@@ -94,6 +94,29 @@ class UserController extends BaseController {
                 next(err);
             }
         });
+
+        router.get(`/byCustomer/:customer_sid`, async (req, res, next) => {
+            try {
+                const {
+                    customer_sid
+                } = req.params;
+
+                
+
+                const users = await userService.findAllByColumns({
+                    columnObjList: [
+                        {
+                            col: "customer_sid",
+                            val: customer_sid
+                        },
+                    ]
+                });
+
+                return res.status(200).json({ users });
+            } catch(err) {
+                next(err);
+            }
+        })
         
         router.put(`/:user_sid`, async (req, res, next) => {
             try {
