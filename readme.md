@@ -15,7 +15,7 @@ This API empowers you to manage organizations, users, email templates, and sched
 - **Language:** Node.js
 - **Package Manager:** npm
 - **Database:** PostgreSQL
-
+- **Cloud Service provider:** AWS for SES
 ## Getting Started
 
 ### Prerequisites
@@ -23,6 +23,7 @@ This API empowers you to manage organizations, users, email templates, and sched
 - Node.js (version 14 or newer recommended)
 - npm
 - PostgreSQL
+- AWS Account (for SES)
 
 ### Installation
 
