@@ -1,3 +1,4 @@
+const InternalServerErrorException = require("../exceptions/InternalServerErrorException");
 const NotFoundException = require("../exceptions/NotFoundException");
 const { formatItemsByType } = require("../utils/jsonUtils");
 const { getNumber } = require("../utils/sidUtils");

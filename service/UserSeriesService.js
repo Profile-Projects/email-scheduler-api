@@ -82,6 +82,21 @@ class UserSeriesService extends CrudService {
         })
     };
 
+    async markUserSeriesComplete({ user_series_sid}) {
+        const { state } = await super.findById({ value: user_series_sid });
+        const updated_state = {
+            ...state,
+            mark_complete: true
+        };
+
+        return await super.update({
+            sidValue: user_series_sid,
+            obj: {
+                state: updated_state
+            }
+        })  
+    };
+
     validateUserPropsRequired({ provided_props, required_props }) {
         const keys = Object.keys(provided_props);
         for(const required_prop of required_props) {

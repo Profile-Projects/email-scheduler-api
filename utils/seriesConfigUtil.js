@@ -10,9 +10,9 @@ const EMAIL_TRIGGER_TYPE = {
     "SCHEDULE": "schedule"
 };
 
-
 const SERIES_STATE = {
-    step_index: 0
+    step_index: 0,
+    mark_complete: false
 }
 
 const SERIES_STRATEGY = {

@@ -41,7 +41,7 @@ class ScheduleService extends CrudService {
         // if (!this.checkStepForTrigger({ step})) return;
         // const { user_props, customer_props } = series;
 
-        const { trigger } = step;
+        const { trigger, schedule } = step;
         if (trigger == EMAIL_TRIGGER_TYPE.IMMEDIATE) {
             await this.scheduleImmediately({
                 user_series_sid
@@ -119,8 +119,12 @@ class ScheduleService extends CrudService {
             const user_series = await this.fetchUserSeries({ user_series_sid });
             const { user_sid, series_sid, state, props } = user_series;
 
-            const { step_index } = state;
+            const { step_index, mark_complete = false } = state;
 
+            // user series has been marked complete, needs to removed from scheduled and subsequent schedules needs to be stopped
+            if (mark_complete) {
+                return await this.stopSchedule({ schedule_sid: sid});
+            }
             // const { user_props, customer_props } = props;
             
             const user = await this.fetchUser({ user_sid });
@@ -187,6 +191,15 @@ class ScheduleService extends CrudService {
             })
         }
     }
+
+    async stopSchedule({ schedule_sid}) {
+        return await super.update({
+            sidValue: schedule_sid,
+            obj: {
+                mark_complete: true
+            }
+        })
+    };
 
     async initSchedule() {
         console.log("initializing schedule runs");

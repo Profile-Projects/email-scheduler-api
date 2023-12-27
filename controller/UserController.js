@@ -77,6 +77,21 @@ class UserController extends BaseController {
                 next(err);
             }
         });
+
+        router.post(`/markSeriesComplete`, async (req, res, next) => {
+            try {
+                const {
+                    user_series_sid
+                } = req.body;
+
+                await userSeriesService.markUserSeriesComplete({ user_series_sid });
+
+                return res.status(200).json({ message: `User Series has been marked complete`});
+
+            } catch (err) {
+                next(err);
+            }
+        })
         
         
         router.get(`/:user_sid`, async (req, res, next) => {
@@ -101,7 +116,7 @@ class UserController extends BaseController {
                     customer_sid
                 } = req.params;
 
-                
+
 
                 const users = await userService.findAllByColumns({
                     columnObjList: [
