@@ -62,6 +62,17 @@ const verifyPlaceholderProps = ({ provided_props = [], found_props = []}) => {
     return true;
 };
 
+const getTemplatePropsForTemplates = ({ email_template_sids, templateMap, prop_name = "user_placeholder_props"}) => {
+    const props = new Set();
+
+    email_template_sids.forEach(email_template_sid => {
+        const email_template = templateMap.get(email_template_sid);
+        const { [prop_name]: values } = email_template?.props;
+        values.map(val => props.add(val));
+    });
+    return Array.from(props);
+};
+
 module.exports = {
     EMAIL_TEMPLATE_CONFIG,
     DEFAULT_SIGNATURE,
@@ -69,5 +80,6 @@ module.exports = {
     COMPANY_EMAIL,
     replacePlaceholders,
     getTemplatePlaceholdersFromContent,
-    verifyPlaceholderProps
+    verifyPlaceholderProps,
+    getTemplatePropsForTemplates
 };
