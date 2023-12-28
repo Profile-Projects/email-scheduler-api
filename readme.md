@@ -16,6 +16,7 @@ This API empowers you to manage organizations, users, email templates, and sched
 - **Package Manager:** npm
 - **Database:** PostgreSQL
 - **Cloud Service provider:** AWS for SES
+- **CI/CD** Terrform, Docker
 ## Getting Started
 
 ### Prerequisites
